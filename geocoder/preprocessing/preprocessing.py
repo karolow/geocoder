@@ -29,3 +29,29 @@ class FileReader:
             name = namedtuple(self._name, headers)
             for row in reader:
                 yield name(*row)
+
+
+def extended_capwords(address: str, exceptions: list) -> str:
+    """Capitalize words excluding indicated expressions.
+
+    Address points very often contain suffixes
+    or Roman numerals that shouldn't be capitalized.
+
+    Args:
+        address (str): A phrase to capitalize.
+        exceptions (list): A list of expressions that shouldn't be capitalized.
+
+    Returns:
+        str: An address with capitalized words.
+
+    """
+
+    words = address.split()
+    capitalized = []
+
+    for word in words:
+        if word not in exceptions:
+            word = word.capitalize()
+        capitalized.append(word)
+
+    return ' '.join(capitalized)
