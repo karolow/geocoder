@@ -17,9 +17,9 @@ class Addresses:
 
     Args:
         source_data (generator): an iterator containing source data.
-        address (str, optional): col name in a CSV file containing address
+        address (str): col name in a CSV file containing address
         street (str, otpional): col name in a CSV file containing street
-        number (str, optional): col name in a CSV file containing number
+        number (str): col name in a CSV file containing number
 
     Yields:
         address (str): Address point to be geocoded.
@@ -37,9 +37,13 @@ class Addresses:
         for row in self._addresses:
             if self._address:
                 address = getattr(row, self._address)
-            else:
+            elif self._street and self._number:
                 address = f'{getattr(row, self._street)}\
                  {getattr(row, self._number)}'
+            else:
+                raise ValueError("You must provide either address "
+                                 "or street and number as arguments.")
+
             address = self._capitalize(address)
             address = self._truncate_street_prefix(address)
             address = self._truncate_address_details(address)
