@@ -7,6 +7,10 @@ from geocoder.geocoding.geocoding import (
 
 class AddressesTests:
 
+    def test_yields_address(self, mock_addresses):
+        result = list(Addresses(mock_addresses, street='street', number='number'))[0]
+        assert result == 'Armii Krajowej 102'
+
     @mark.parametrize("address, expected", [
         ("Jordana 12", True),
         ("PCK 7", True),

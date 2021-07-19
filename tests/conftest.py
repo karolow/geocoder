@@ -18,7 +18,11 @@ def mock_coordinates(tmp_path):
 
 
 @fixture
-def addr_instance(mock_coordinates):
-    _, source_data = mock_coordinates
-    instance = Addresses(source_data, address='address')
-    yield instance
+def mock_addresses():
+    csv_data = [
+        "city,street,number",
+        "Katowice,Armii Krajowej,102",
+        "Katowice,Jordana,20",
+    ]
+    address = namedtuple('Address', csv_data[0].split(','))
+    return [address(*row.split(',')) for row in csv_data[1:]]
