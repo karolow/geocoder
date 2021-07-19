@@ -1,6 +1,8 @@
 from collections import namedtuple
 from pytest import fixture
 
+from geocoder.geocoding import Addresses
+
 
 @fixture
 def mock_coordinates(tmp_path):
@@ -13,3 +15,10 @@ def mock_coordinates(tmp_path):
     datafile = tmp_path / "coordinates.csv"
     datafile.write_text("\n".join(csv_data))
     return str(datafile), output
+
+
+@fixture
+def addr_instance(mock_coordinates):
+    _, source_data = mock_coordinates
+    instance = Addresses(source_data, address='address')
+    yield instance
