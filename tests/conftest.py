@@ -1,18 +1,15 @@
 from collections import namedtuple
-import csv
 from pytest import fixture
 
-raw_csv_coordinates_path = 'tests/data/raw/raw_coordinates.csv'
-
-
-# HELPER FUNCTIONS
 
 @fixture
-def coordinates_data(path=raw_csv_coordinates_path):
-    with open(path, 'r') as file:
-        reader = csv.reader(file)
-        headers = next(reader)
-        content = next(reader)
-    address = namedtuple('Address', headers)
-    output = address(*content)
-    yield path, output
+def mock_coordinates(tmp_path):
+    csv_data = [
+        "city,street,number,postal_code,state,lon,lat",
+        "Katowice,Armii Krajowej,102,40-671,istniejacy,259921.7313,498200.1764",
+    ]
+    address = namedtuple('Address', csv_data[0].split(','))
+    output = address(*csv_data[1].split(','))
+    datafile = tmp_path / "coordinates.csv"
+    datafile.write_text("\n".join(csv_data))
+    return str(datafile), output
