@@ -26,3 +26,10 @@ def mock_addresses():
     ]
     address = namedtuple('Address', csv_data[0].split(','))
     return [address(*row.split(',')) for row in csv_data[1:]]
+
+
+@fixture
+def addr_instance(mock_addresses):
+    _, source_data = mock_addresses
+    instance = Addresses(source_data, street="street", number="number")
+    yield instance
