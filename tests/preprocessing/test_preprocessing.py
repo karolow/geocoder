@@ -21,7 +21,8 @@ class FileReaderTests:
     ("jana III sobieskiego 17", "Jana III Sobieskiego 17"),
     ("73 - go Pułku Piechoty 3", "73 - go Pułku Piechoty 3"),
     ("ALEJA ROŹDZIEŃSKIEGO 100/LOK.3", "Aleja Roździeńskiego 100/lok.3"),
+    ("Plac Sławika i Antalla 1", "Plac Sławika i Antalla 1"),
 ])
 def test_extended_capwords(address, expected):
-    exceptions = ['go', 'II', 'III']
+    exceptions = ['go', 'i', 'II', 'III']
     assert extended_capwords(address, exceptions) == expected

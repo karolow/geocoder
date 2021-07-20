@@ -53,6 +53,7 @@ class AddressesTests:
 
     @mark.parametrize("address, expected", [
         ("Jordana 20/7", "Jordana 20"),
+        ("Jordana 20 Lokal. 4", "Jordana 20"),
         ("Jordana 20 Lok. 4", "Jordana 20"),
         ("Jordana 20 Lok.4", "Jordana 20"),
         ("Jordana 20 Lok 4", "Jordana 20"),
@@ -85,7 +86,7 @@ class CoordinatesTests:
         assert result == expected
 
     @mark.parametrize("address, expected", [
-        ("Plac Karola Miarki 1", "Pl. Karola Miarki 1"),
+        ("Pl. Karola Miarki 1", "Plac Karola Miarki 1"),
     ])
     def test_square_prefix_is_truncated(self, coord_instance, address, expected):
         assert coord_instance._truncate_square_prefix(address) == expected

@@ -71,6 +71,7 @@ class Addresses:
         """Capitalize words excluding indicated expressions"""
         exceptions = [
             'go',
+            'i',
             'II',
             'III',
         ]
@@ -91,6 +92,7 @@ class Addresses:
         """
         return '|'.join([
             '/',
+            ' Lokal\\. ',
             ' Lok\\. ',
             ' Lok\\.',
             ' Lok ',
@@ -147,4 +149,4 @@ class Coordinates:
         Abbreviate 'square' in the address
         to keep the source data consistent.
         """
-        return address.replace('Plac', 'Pl.')
+        return address.replace('Pl.', 'Plac')
