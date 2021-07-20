@@ -1,3 +1,4 @@
 from .geocoding import (
-    Addresses
+    Addresses,
+    Coordinates,
 )

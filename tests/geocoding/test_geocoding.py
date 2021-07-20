@@ -1,7 +1,8 @@
 from pytest import mark
 
 from geocoder.geocoding.geocoding import (
-    Addresses
+    Addresses,
+    Coordinates,
 )
 
 
@@ -68,3 +69,23 @@ class AddressesTests:
     ])
     def test_address_details_are_truncated(self, addr_instance, address, expected):
         assert addr_instance._truncate_address_details(address) == expected
+
+
+class CoordinatesTests:
+
+    def test_parse_data_to_dict(self, mock_tuple_coordinates):
+        c = Coordinates(mock_tuple_coordinates, street='street', number='number',
+                        lat='lat', lon='lon')
+        result = c.coordinates
+        expected = {
+            'Armii Krajowej 102': ('498200.1764', '259921.7313'),
+            'Juliana Fałata 15': ('502763.3093', '259301.2136'),
+            'Orlików 13': ('497821.8604', '259152.4308')
+        }
+        assert result == expected
+
+    @mark.parametrize("address, expected", [
+        ("Plac Karola Miarki 1", "Pl. Karola Miarki 1"),
+    ])
+    def test_square_prefix_is_truncated(self, coord_instance, address, expected):
+        assert coord_instance._truncate_square_prefix(address) == expected

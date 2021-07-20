@@ -109,3 +109,42 @@ class Addresses:
     def _truncate_address_details(self, address: str) -> str:
         """Remove trailing parts of the address, e.g. a flat number"""
         return re.split(self._get_separators(), address)[0].strip()
+
+
+class Coordinates:
+    """Collection of coordinate points used for geocoding.
+
+    Args:
+        source_data (generator): a generator with source data
+        street (str): street name variable name (default is 'street')
+        number (str): facility number variable name (default is 'number')
+        lat (str): latitude variable name (default is 'lat')
+        lon (str): longitude variable name (default is 'lon')
+
+    Attributes:
+        coordinates (dict): a collection of coordinate points.
+
+    """
+
+    def __init__(self, source_data, street='street', number='number', lat='lat', lon='lon'):
+        self.coordinates = self._preprocess_data(source_data, street, number, lat, lon)
+
+    def _preprocess_data(self, source_data, street, number, lat, lon):
+        output = {}
+
+        for row in source_data:
+            street_name = getattr(row, street)
+            street_name = self._truncate_square_prefix(street_name)
+            num = getattr(row, number).lower()
+            address_point = f'{street_name} {num}'
+            lat_lon = (getattr(row, lat), getattr(row, lon))
+            output[address_point] = lat_lon
+
+        return output
+
+    def _truncate_square_prefix(self, address: str) -> str:
+        """
+        Abbreviate 'square' in the address
+        to keep the source data consistent.
+        """
+        return address.replace('Plac', 'Pl.')

@@ -8,8 +8,8 @@ from geocoder.preprocessing.preprocessing import (
 
 class FileReaderTests:
 
-    def test_reading_csv_file(self, mock_coordinates):
-        raw_file, expected = mock_coordinates
+    def test_reading_csv_file(self, mock_csv_coordinates):
+        raw_file, expected = mock_csv_coordinates
         result = list(FileReader(raw_file, 'Address'))[0]
         assert result == expected
 
