@@ -130,8 +130,10 @@ class Coordinates:
 
     """
 
-    def __init__(self, source_data, street='street', number='number', lat='lat', lon='lon'):
-        self.coordinates = self._preprocess_data(source_data, street, number, lat, lon)
+    def __init__(self, source_data, street='street', number='number',
+                 lat='lat', lon='lon'):
+        self.coordinates = self._preprocess_data(source_data, street, number,
+                                                 lat, lon)
 
     def _preprocess_data(self, source_data, street, number, lat, lon):
         output = {}
@@ -173,6 +175,7 @@ def geocode(addresses, coordinates, fuzzy_set, output_file):
                     result = coordinates.coordinates[match]
                     output = [address, match, result]
                 except (KeyError, TypeError):
-                    output = [address, '', 'Missing or wrong address – no match found']
+                    output = [address, '',
+                              'Missing or wrong address – no match found']
 
             csv_writer.writerow(output)
