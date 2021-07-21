@@ -8,4 +8,6 @@ install:
  - pip install -r requirements.txt
  - pip install pytest-cov codecov
 script:
- - pytest -v --cov=geocoder
+ - pytest -v --cov=geocoder tests
+after_success:
+    - codecov
