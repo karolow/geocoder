@@ -1,0 +1,7 @@
+click==8.0.1
+fuzzyset==0.0.19
+importlib-metadata==4.6.1
+python-Levenshtein==0.12.2
+texttable==1.6.4
+typing-extensions==3.10.0.0
+zipp==3.5.0
