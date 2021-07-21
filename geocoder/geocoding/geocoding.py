@@ -156,26 +156,23 @@ class Coordinates:
 
 def geocode(addresses, coordinates, fuzzy_set, output_file):
 
-    for address in addresses:
+    with open(output_file, 'a') as file:
+        csv_writer = csv.writer(file)
+        csv_writer.writerow(['original_address', 'match', 'coordinates'])
 
-        try:
-            # try exact match with preprocessing and prefix removal
-            result = coordinates.coordinates[address]
-        except KeyError:
+        for address in addresses:
+
             try:
-                if not address:
-                    result = 'Missing or wrong address'
-                    continue
-                # fuzzy match using fuzzy-match package
-                # (https://pypi.org/project/fuzzy-match/)
-                best_match = find_match(address, fuzzy_set, return_top_match=True)
-                result = coordinates.coordinates[best_match]
+                # try exact match with preprocessing and prefix removal
+                result = coordinates.coordinates[address]
+                output = [address, address, result]
             except KeyError:
-                result = 'No match found'
+                try:
+                    # (https://pypi.org/project/fuzzy-match/)
+                    match = find_match(address, fuzzy_set, return_top_match=True)
+                    result = coordinates.coordinates[match]
+                    output = [address, match, result]
+                except (KeyError, TypeError):
+                    output = [address, '', 'Missing or wrong address – no match found']
 
-        output = [address, result]
-        # output.append(result)
-
-        with open(output_file, 'a') as file:
-            csv_writer = csv.writer(file)
             csv_writer.writerow(output)
