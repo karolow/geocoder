@@ -1,13 +1,12 @@
 from pytest import mark
 
-from geocoder.preprocessing.preprocessing import (
+from geocoder.preprocessing import (
     FileReader,
     extended_capwords,
 )
 
 
 class FileReaderTests:
-
     def test_reading_csv_file(self, mock_csv_coordinates):
         raw_file, expected = mock_csv_coordinates
         result = list(FileReader(raw_file, 'Address'))[0]

@@ -1,6 +1,6 @@
 from pytest import mark
 
-from geocoder.geocoding.geocoding import (
+from geocoder.geocoding import (
     Addresses,
     Coordinates,
 )

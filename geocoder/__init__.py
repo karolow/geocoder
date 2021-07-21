@@ -9,6 +9,7 @@ __author__ = """karolow"""
 __version__ = "0.1.0"
 
 from . import (
+    fuzzymatching,
     geocoding,
     preprocessing,
 )
