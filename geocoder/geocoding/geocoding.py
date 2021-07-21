@@ -1,6 +1,8 @@
+import csv
 import re
 
-from geocoder.preprocessing.preprocessing import extended_capwords
+from geocoder.fuzzymatching import find_match
+from geocoder.preprocessing import extended_capwords
 
 
 class Addresses:
@@ -150,3 +152,30 @@ class Coordinates:
         to keep the source data consistent.
         """
         return address.replace('Pl.', 'Plac')
+
+
+def geocode(addresses, coordinates, fuzzy_set, output_file):
+
+    for address in addresses:
+
+        try:
+            # try exact match with preprocessing and prefix removal
+            result = coordinates.coordinates[address]
+        except KeyError:
+            try:
+                if not address:
+                    result = 'Missing or wrong address'
+                    continue
+                # fuzzy match using fuzzy-match package
+                # (https://pypi.org/project/fuzzy-match/)
+                best_match = find_match(address, fuzzy_set, return_top_match=True)
+                result = coordinates.coordinates[best_match]
+            except KeyError:
+                result = 'No match found'
+
+        output = [address, result]
+        # output.append(result)
+
+        with open(output_file, 'a') as file:
+            csv_writer = csv.writer(file)
+            csv_writer.writerow(output)
