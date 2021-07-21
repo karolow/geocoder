@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/karolow/geocoder.svg?branch=main)](https://travis-ci.com/karolow/geocoder)
+[![codecov](https://codecov.io/gh/karolow/geocoder/branch/main/graph/badge.svg?token=L7hjNvXOcg)](https://codecov.io/gh/karolow/geocoder)
+
 # geocoder
 
 A Python package to batch geocode address points in Katowice area.
