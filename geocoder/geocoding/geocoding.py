@@ -158,7 +158,10 @@ class Coordinates:
 
 def geocode(addresses, coordinates, fuzzy_set, output_file):
 
-    with open(output_file, 'a') as file:
+    successful = 0
+    missing = 0
+
+    with open(output_file, 'w') as file:
         csv_writer = csv.writer(file)
         csv_writer.writerow(['original_address', 'match', 'coordinates'])
 
@@ -168,14 +171,19 @@ def geocode(addresses, coordinates, fuzzy_set, output_file):
                 # try exact match with preprocessing and prefix removal
                 result = coordinates.coordinates[address]
                 output = [address, address, result]
+                successful += 1
             except KeyError:
                 try:
                     # (https://pypi.org/project/fuzzy-match/)
                     match = find_match(address, fuzzy_set, return_top_match=True)
                     result = coordinates.coordinates[match]
                     output = [address, match, result]
+                    successful += 1
                 except (KeyError, TypeError):
                     output = [address, '',
                               'Missing or wrong address – no match found']
+                    missing += 1
 
             csv_writer.writerow(output)
+
+        return successful, missing

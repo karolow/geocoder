@@ -29,6 +29,7 @@ def batch_geocode(infile, outfile, cols=None):
 
     fuzzy_set = build_fuzzyset(coordinates.coordinates)
     successful, missing = geocode(addresses, coordinates, fuzzy_set, outfile)
+    click.echo(f'Geocoded: {successful}, missing or wrong values: {missing}')
 
 
 def cli():
