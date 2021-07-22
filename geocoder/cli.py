@@ -13,17 +13,22 @@ from geocoder.preprocessing import FileReader
 @click.command()
 @click.argument('infile', type=click.Path(exists=True))
 @click.argument('outfile', type=click.Path(exists=False))
-def batch_geocode(infile, outfile):
+@click.option('--cols', nargs=2, type=str, help='Specify column names (street number) if address stored in two columns')
+def batch_geocode(infile, outfile, cols=None):
     """Batch-geocode address points from Katowice area"""
     coords_path = resource_filename('geocoder.geocoding', 'data/coordinates.csv')
     coord_source = FileReader(coords_path, 'Address')
     to_geocode = FileReader(infile, 'Address')
 
     coordinates = Coordinates(coord_source)
-    addresses = Addresses(to_geocode, address='address')
+    if cols:
+        street, number = cols
+        addresses = Addresses(to_geocode, street=street, number=number)
+    else:
+        addresses = Addresses(to_geocode, address='address')
 
     fuzzy_set = build_fuzzyset(coordinates.coordinates)
-    geocode(addresses, coordinates, fuzzy_set, outfile)
+    successful, missing = geocode(addresses, coordinates, fuzzy_set, outfile)
 
 
 def cli():

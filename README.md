@@ -11,12 +11,13 @@ geocoder is based on regularly updated data from state registers and allows for 
 
 ### Details
 
-Under the hood geocoder performs address matching in several steps: first, addresses are unified (via capitalization, prefix elimination etc.) and mapped directly to coordinates. In case of ambiguity, e.g. `Jordana 12` --> `Henryka Jordana 12`, geocoder uses cosine similarity via the [fuzzyset package](https://github.com/axiak/fuzzyset).
+Under the hood, geocoder performs address matching in several steps: first, addresses are unified (via capitalization, prefix elimination etc.), then mapped directly to coordinates. In case of misspellings or ambiguity, e.g. `Jordana 12` --> `Henryka Jordana 12`, geocoder applies approximate string matching via the [fuzzyset package](https://github.com/axiak/fuzzyset).
 
 ### Features
 
 * batch geocode address points in Katowice
-* keep the address database up-to-date by checking for daily updates
+* account for misspellings and differences in address wording with approximate string matching
+* keep the address database up-to-date with weekly updates
 
 ### Installation
 
@@ -35,23 +36,45 @@ pip install -e .
 
 ### Usage
 
-geocoder can be used right away from command line:
+geocoder can be used right away from command line, `input_file.csv` must include addresses that you want to geocode, there are two options available:
+
+1. Address is stored in one CSV column.
 
 ```shell
 geocoder input_file.csv output_file.csv
 ```
 
-`input_file.csv` must include addresses that you want to geocode, there are two options available:
-1. Make sure the column name is `address`, e.g. Jordana 12.
-2. Or store addresses in two separate columns: `street` & `number`.
+```csv
+city,address
+Katowice,1 Maja 26
+Katowice,Adama Mickiewicza 20
+Katowice,Aleja Roździeńskiego 98
+Katowice,,
+```
+
+2. Address is stored in two columns.
+
+```shell
+geocoder --cols street_col_name number_col_name input_file.csv output_file.csv
+```
 
 ```csv
-city,street,number
-Katowice,Armii Krajowej,102
-Katowice,Jordana,20
+address_city,street,number
+Katowice,1 Maja,26
+Katowice,Adama Mickiewicza,20
+Katowice,Aleja Roździeńskiego,98
+Katowice,,
 ```
 
 The output file consists of four values: `original_address`, `found_address`, `lat`, `lon`. To review the mapping process, compare `original_address` with the best match in the `found_address` column.
+
+```shell
+original_address,match,coordinates
+1 Maja 26,1 Maja 26,"('502895.4966', '265640.7773')"
+Adama Mickiewicza 20,Adama Mickiewicza 20,"('501340.6193', '265963.528999999')"
+Aleja Roździeńskiego 98,Aleja Walentego Roździeńskiego 98,"('502918.857', '265983.025900001')"
+,,Missing or wrong address – no match found
+```
 
 Use --help to learn more.
 
